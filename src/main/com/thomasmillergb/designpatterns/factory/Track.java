@@ -9,4 +9,6 @@ public interface Track {
     String getName();
 
     String getBand();
+
+    String getDuration();
 }
