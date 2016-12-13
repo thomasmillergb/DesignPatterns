@@ -6,9 +6,9 @@ package com.thomasmillergb.designpatterns.factory;
  */
 public abstract class AbstractTrack implements Track
 {
-    private String name_    = "No Track Name";
     private String band_    = "No Band Name";
     private int    duration = 3;
+    private String name_    = "No Track Name";
 
     protected AbstractTrack(String name, String band)
     {

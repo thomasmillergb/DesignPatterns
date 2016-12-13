@@ -8,8 +8,10 @@ import com.thomasmillergb.designpatterns.factory.cd.RockTheWorldCD;
  * @author Thomas
  *         Created by Thomas on 10/12/2016.
  */
-public class CDFactory {
-    public static CD createCD(String cdName) {
+public class CDFactory
+{
+    public static CD createCD(String cdName)
+    {
         CD cd = null;
         switch (cdName) {
             case "MUSE":
