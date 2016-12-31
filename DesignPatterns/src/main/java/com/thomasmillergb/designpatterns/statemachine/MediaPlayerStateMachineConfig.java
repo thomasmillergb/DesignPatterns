@@ -1,5 +1,8 @@
 package com.thomasmillergb.designpatterns.statemachine;
 
+import com.thomasmillergb.designpatterns.command.MediaPlayerCommandFactory;
+import com.thomasmillergb.designpatterns.command.MediaPlayerCommandKey;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachine;
@@ -20,37 +23,46 @@ import java.util.EnumSet;
  */
 @Configuration
 @EnableStateMachine
-public class MediaPlayerStateMachineConfig  extends EnumStateMachineConfigurerAdapter<MediaPlayerStates, MediaPlayerEvents>
-{
+public class MediaPlayerStateMachineConfig  extends EnumStateMachineConfigurerAdapter<MediaPlayerStates, MediaPlayerEvents> {
+
+    private final MediaPlayerCommandFactory mediaPlayerCommands_;
+
+    @Autowired
+    public MediaPlayerStateMachineConfig(MediaPlayerCommandFactory mediaPlayerCommands_) {
+        this.mediaPlayerCommands_ = mediaPlayerCommands_;
+    }
+
+
     @Override
     public void configure(StateMachineConfigurationConfigurer<MediaPlayerStates, MediaPlayerEvents> config)
-        throws Exception {
+            throws Exception {
         config
-            .withConfiguration()
-            .autoStartup(true)
-            .listener(listener());
+                .withConfiguration()
+                .autoStartup(true)
+                .listener(listener());
 
     }
 
     @Override
     public void configure(StateMachineStateConfigurer<MediaPlayerStates, MediaPlayerEvents> states)
-        throws Exception {
+            throws Exception {
         states
-            .withStates()
-            .initial(MediaPlayerStates.STARTUP)
-            .end(MediaPlayerStates.OFF)
-            .states(EnumSet.allOf(MediaPlayerStates.class));
+                .withStates()
+                .initial(MediaPlayerStates.STARTUP)
+                .end(MediaPlayerStates.OFF)
+                .states(EnumSet.allOf(MediaPlayerStates.class));
     }
 
     @Override
     public void configure(StateMachineTransitionConfigurer<MediaPlayerStates, MediaPlayerEvents> transitions)
-        throws Exception {
+            throws Exception {
         transitions
-            .withExternal()
-            .source(MediaPlayerStates.STARTUP).target(MediaPlayerStates.PLAYING).event(MediaPlayerEvents.PLAYING)
-            .and()
-            .withExternal()
-            .source(MediaPlayerStates.PLAYING).target(MediaPlayerStates.STOP).event(MediaPlayerEvents.STOP);
+                .withExternal()
+                .source(MediaPlayerStates.STARTUP).target(MediaPlayerStates.PLAYING).event(MediaPlayerEvents.PLAYING)
+                .action(context -> mediaPlayerCommands_.executeCommand(MediaPlayerCommandKey.PLAY))
+                .and()
+                .withExternal()
+                .source(MediaPlayerStates.PLAYING).target(MediaPlayerStates.STOP).event(MediaPlayerEvents.STOP).action(context -> mediaPlayerCommands_.executeCommand(MediaPlayerCommandKey.PLAY));
 
     }
 
@@ -64,4 +76,8 @@ public class MediaPlayerStateMachineConfig  extends EnumStateMachineConfigurerAd
         };
     }
 
+    public void test(){
+        System.out.println("help me");
+    }
 }
+
