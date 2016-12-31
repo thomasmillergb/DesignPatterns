@@ -1,14 +1,9 @@
 package com.thomasmillergb.designpatterns.statemachine;
 
-import com.thomasmillergb.designpatterns.command.MediaPlayer;
-import com.thomasmillergb.designpatterns.command.MediaPlayerCommandFactory;
-import com.thomasmillergb.designpatterns.command.MediaPlayerCommandKey;
-import com.thomasmillergb.designpatterns.command.MediaPlayerImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
-import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
@@ -25,15 +20,10 @@ import java.util.EnumSet;
  */
 @Configuration
 @EnableStateMachine
-public class MediaPlayerStateMachineConfig  extends StateMachineConfigurerAdapter<MediaPlayerStates, MediaPlayer>
+public class MediaPlayerStateMachineConfig  extends EnumStateMachineConfigurerAdapter<MediaPlayerStates, MediaPlayerEvents>
 {
-    MediaPlayerCommandFactory mediaPlayerCommandFactory_;
-    public MediaPlayerStateMachineConfig() {
-        mediaPlayerCommandFactory_ = MediaPlayerCommandFactory.init(new MediaPlayerImpl());
-    }
-
     @Override
-    public void configure(StateMachineConfigurationConfigurer<MediaPlayerStates, MediaPlayer> config)
+    public void configure(StateMachineConfigurationConfigurer<MediaPlayerStates, MediaPlayerEvents> config)
         throws Exception {
         config
             .withConfiguration()
@@ -43,7 +33,7 @@ public class MediaPlayerStateMachineConfig  extends StateMachineConfigurerAdapte
     }
 
     @Override
-    public void configure(StateMachineStateConfigurer<MediaPlayerStates, MediaPlayer> states)
+    public void configure(StateMachineStateConfigurer<MediaPlayerStates, MediaPlayerEvents> states)
         throws Exception {
         states
             .withStates()
@@ -53,22 +43,22 @@ public class MediaPlayerStateMachineConfig  extends StateMachineConfigurerAdapte
     }
 
     @Override
-    public void configure(StateMachineTransitionConfigurer<MediaPlayerStates, MediaPlayer> transitions)
+    public void configure(StateMachineTransitionConfigurer<MediaPlayerStates, MediaPlayerEvents> transitions)
         throws Exception {
         transitions
             .withExternal()
-            .source(MediaPlayerStates.STARTUP).target(MediaPlayerStates.PLAYING).event(mediaPlayerCommandFactory_.executeCommand(MediaPlayerCommandKey.PLAY))
+            .source(MediaPlayerStates.STARTUP).target(MediaPlayerStates.PLAYING).event(MediaPlayerEvents.PLAYING)
             .and()
             .withExternal()
-            .source(MediaPlayerStates.PLAYING).target(MediaPlayerStates.STOP).event(mediaPlayerCommandFactory_.executeCommand(MediaPlayerCommandKey.BACKWARDS));
+            .source(MediaPlayerStates.PLAYING).target(MediaPlayerStates.STOP).event(MediaPlayerEvents.STOP);
 
     }
 
     @Bean
-    public StateMachineListener<MediaPlayerStates, MediaPlayer> listener() {
-        return new StateMachineListenerAdapter<MediaPlayerStates, MediaPlayer>() {
+    public StateMachineListener<MediaPlayerStates, MediaPlayerEvents> listener() {
+        return new StateMachineListenerAdapter<MediaPlayerStates, MediaPlayerEvents>() {
             @Override
-            public void stateChanged(State<MediaPlayerStates, MediaPlayer> from, State<MediaPlayerStates, MediaPlayer> to) {
+            public void stateChanged(State<MediaPlayerStates, MediaPlayerEvents> from, State<MediaPlayerStates, MediaPlayerEvents> to) {
                 System.out.println("State change to " + to.getId());
             }
         };

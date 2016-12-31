@@ -20,7 +20,7 @@ public class MediaPlayerImpl implements MediaPlayer
 
     public MediaPlayerImpl()
     {
-
+        cd_ = CDFactory.createCD("MUSE");
     }
 
     // TODO add threading
