@@ -78,6 +78,11 @@ public class MediaPlayerImpl implements MediaPlayer {
         play();
     }
 
+    @Override
+    public void pause() {
+        System.out.println("Pausing Track");
+    }
+
     public CD getCd() {
         return cd_;
     }

@@ -21,6 +21,7 @@ public class MediaPlayerCommandFactory {
         addCommand(MediaPlayerCommandKey.PLAY, mediaPlayer_::play);
         addCommand(MediaPlayerCommandKey.NEXT, mediaPlayer_::next);
         addCommand(MediaPlayerCommandKey.PREV, mediaPlayer_::prev);
+        addCommand(MediaPlayerCommandKey.STOP, mediaPlayer_::pause);
 
     }
 

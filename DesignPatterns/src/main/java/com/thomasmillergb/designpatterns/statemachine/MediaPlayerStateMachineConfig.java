@@ -62,7 +62,7 @@ public class MediaPlayerStateMachineConfig  extends EnumStateMachineConfigurerAd
                 .action(context -> mediaPlayerCommands_.executeCommand(MediaPlayerCommandKey.PLAY))
                 .and()
                 .withExternal()
-                .source(MediaPlayerStates.PLAYING).target(MediaPlayerStates.STOP).event(MediaPlayerEvents.STOP).action(context -> mediaPlayerCommands_.executeCommand(MediaPlayerCommandKey.PLAY));
+                .source(MediaPlayerStates.PLAYING).target(MediaPlayerStates.STOP).event(MediaPlayerEvents.STOP).action(context -> mediaPlayerCommands_.executeCommand(MediaPlayerCommandKey.STOP));
 
     }
 

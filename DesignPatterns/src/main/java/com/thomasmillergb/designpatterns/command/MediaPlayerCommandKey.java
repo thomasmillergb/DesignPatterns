@@ -6,5 +6,5 @@ package com.thomasmillergb.designpatterns.command;
  */
 public enum MediaPlayerCommandKey
 {
-    PLAY, NEXT, PREV, FORWARDS, BACKWARDS
+    PLAY, NEXT, PREV, FORWARDS, STOP, BACKWARDS
 }

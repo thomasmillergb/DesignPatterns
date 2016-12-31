@@ -11,4 +11,6 @@ public interface MediaPlayer
     void next();
 
     void prev();
+
+    void pause();
 }
