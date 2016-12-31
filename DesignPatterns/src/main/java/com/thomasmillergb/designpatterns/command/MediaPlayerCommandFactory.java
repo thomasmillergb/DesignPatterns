@@ -33,11 +33,12 @@ public class MediaPlayerCommandFactory
         commands_.put(name, command);
     }
 
-    public void executeCommand(MediaPlayerCommandKey key)
+    public MediaPlayer executeCommand(MediaPlayerCommandKey key)
     {
         if (commands_.containsKey(key)) {
             commands_.get(key).execute();
         }
+        return mediaPlayer_;
     }
 
     public void listCommands() {
